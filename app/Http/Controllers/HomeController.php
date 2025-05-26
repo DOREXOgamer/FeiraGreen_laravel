@@ -119,7 +119,7 @@ class HomeController extends Controller
     public function addProduto(Request $request)
     {
         $request->validate([
-            'nome'      => 'required|string|max:255',
+            'nome'      => 'required|string|max:50',
             'preco'     => 'required|numeric|min:0.01|max:5000.00', // Adicionando min e max para o preço
             'categoria' => 'required|string|max:255', // Ajustei para garantir que a categoria também tem um max de caracteres.
             'imagem'    => 'required|image|max:2048', // <<< ALTERADO: 'nullable' removido, agora é obrigatório
@@ -173,10 +173,10 @@ class HomeController extends Controller
         }
 
         $rules = [
-            'nome'      => 'required|string|max:255',
+            'nome'      => 'required|string|max:50',
             'preco'     => 'required|numeric|min:0.01|max:5000.00',
             'categoria' => 'required|string|max:255',
-            // 'imagem' => 'nullable|image|max:2048', // Original
+            
         ];
 
         // Se o produto não tiver uma imagem, torne a imagem obrigatória na atualização também.
@@ -252,7 +252,7 @@ class HomeController extends Controller
         foreach ($user->produtos as $produto) {
             // Correção no caminho do Storage para deletar imagem de produto
             if ($produto->imagem) {
-                $imagePath = 'public/product_images/' . $produto->imagem; // Corrigido para product_images
+                $imagePath = 'public/product_images/' . $produto->imagem; 
                 if (Storage::exists($imagePath)) {
                     Storage::delete($imagePath);
                 }

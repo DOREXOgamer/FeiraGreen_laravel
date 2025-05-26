@@ -27,9 +27,11 @@
           {{-- Nome --}}
           <div class="produto-add-form-group">
             <label for="nome" class="produto-add-label">Nome do Produto:</label>
-            <input type="text" id="nome" name="nome"
-                  value="{{ old('nome') }}" required
-                  class="produto-add-control @error('nome') is-invalid @enderror">
+              <input type="text" id="nome" name="nome"
+                value="{{ old('nome') }}" required maxlength="50"
+                pattern="[A-Za-zÀ-ÿ\s]+" title="Apenas letras são permitidas"
+                class="produto-add-control @error('nome') is-invalid @enderror">
+
             @error('nome')
               <div class="produto-add-invalid-feedback">{{ $message }}</div>
             @enderror
@@ -112,9 +114,6 @@
             <div>
               <h5>{{ $produto->nome }}</h5>
               <small>R$ {{ number_format($produto->preco,2,',','.') }} — {{ $produto->categoria }}</small>
-              @if($produto->organico)
-                <span class="badge bg-success ms-2">Orgânico</span>
-              @endif
             </div>
           </div>
           <div>

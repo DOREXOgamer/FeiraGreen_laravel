@@ -17,6 +17,9 @@
             <label for="nome" class="form-label">Nome do Produto</label>
             <input type="text" id="nome" name="nome" 
                    value="{{ old('nome', $produto->nome) }}" required 
+                   maxlength="50"
+                   pattern="[A-Za-zÀ-ÿ\s]+"
+                   title="Apenas letras são permitidas"
                    class="form-control @error('nome') is-invalid @enderror">
             @error('nome')
                 <div class="text-danger">{{ $message }}</div>
@@ -89,10 +92,16 @@
 
         <div class="btn-container-primary">
             <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i>Atualizar Produto
+                <i class="fas fa-save"></i> Atualizar Produto
             </button>
         </div>
     </form>
-
 </div>
+
+{{-- Script opcional para impedir números dinamicamente (extra) --}}
+<script>
+    document.getElementById('nome').addEventListener('input', function (e) {
+        this.value = this.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+    });
+</script>
 @endsection
