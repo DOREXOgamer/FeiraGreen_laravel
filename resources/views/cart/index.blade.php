@@ -84,7 +84,7 @@
                 
                 <div class="carrinho-resumo-linha">
                     <span class="carrinho-resumo-label">Frete</span>
-                    <span class="carrinho-resumo-valor">R$ 15,00</span>
+                    <span class="carrinho-resumo-valor">Grátis</span>
                 </div>
                 
                 <div class="carrinho-resumo-linha carrinho-resumo-total">
@@ -235,7 +235,7 @@ function updateTotals() {
         subtotal += price * quantity;
     });
     
-    const frete = 15.00;
+    const frete = 0;
     const total = subtotal + frete;
     
     document.getElementById('subtotal').textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
@@ -248,4 +248,6 @@ function updateAllQuantities() {
     });
 }
 </script>
+
+
 @endsection

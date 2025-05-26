@@ -61,9 +61,8 @@ Route::post('/cadastro', [RegisterController::class, 'register'])->name('registe
     Route::delete('/produto/deletar/{id}',[HomeController::class, 'deleteProduto'])   ->name('produto.delete');
 
     
-    
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');

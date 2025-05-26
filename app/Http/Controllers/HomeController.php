@@ -15,7 +15,9 @@ class HomeController extends Controller
      */
     public function home()
     {
-        $produtos = Produto::all() ?? [];
+        // Produtos em Destaque (ou todos os produtos se não houver lógica de destaque)
+        $produtosDestaque = Produto::all(); // Pode ajustar para pegar produtos em destaque reais se tiver um campo 'destaque' no model
+
         $jsonPath = public_path('imagens/imagens.json');
         $imagens = [];
 
@@ -23,9 +25,12 @@ class HomeController extends Controller
             $imagens = json_decode(File::get($jsonPath), true) ?? [];
         }
 
+        $legumes = Produto::where('categoria', 'Legumes')->get();
+
         return view('home', [
-            'produtos' => $produtos,
-            'imagens'  => $imagens
+            'produtos' => $produtosDestaque, // Usado para "Produtos em Destaque"
+            'imagens'  => $imagens,
+            'legumes'  => $legumes // <<< Nova variável para a seção de legumes
         ]);
     }
 
@@ -34,6 +39,14 @@ class HomeController extends Controller
      */
     public function buscar(Request $request)
     {
+        // Adicionando validação para o termo de busca
+        $request->validate([
+            'termo' => 'nullable|string|max:100', // Limite de 100 caracteres para o termo de busca
+        ], [
+            'termo.max' => 'O termo de busca não pode ter mais de 100 caracteres.',
+            'termo.string' => 'O termo de busca deve ser um texto válido.'
+        ]);
+
         $termo = $request->input('termo', '');
         $produtos = Produto::where('nome', 'LIKE', "%{$termo}%")->get();
         return view('busca', compact('produtos', 'termo'));
@@ -107,9 +120,15 @@ class HomeController extends Controller
     {
         $request->validate([
             'nome'      => 'required|string|max:255',
-            'preco'     => 'required|numeric',
-            'categoria' => 'required|string|max:255',
-            'imagem'    => 'nullable|image|max:2048',
+            'preco'     => 'required|numeric|min:0.01|max:5000.00', // Adicionando min e max para o preço
+            'categoria' => 'required|string|max:255', // Ajustei para garantir que a categoria também tem um max de caracteres.
+            'imagem'    => 'required|image|max:2048', // <<< ALTERADO: 'nullable' removido, agora é obrigatório
+        ], [
+            'preco.min' => 'O preço deve ser no mínimo R$ 0,01.',
+            'preco.max' => 'O preço não pode exceder R$ 5.000,00.',
+            'imagem.required' => 'A imagem do produto é obrigatória.', // <<< Mensagem de erro personalizada
+            'imagem.image' => 'O arquivo deve ser uma imagem válida.',
+            'imagem.max' => 'A imagem não pode ter mais de 2MB.'
         ]);
 
         $produto = new Produto();
@@ -153,11 +172,28 @@ class HomeController extends Controller
             abort(403, 'Acesso negado');
         }
 
-        $request->validate([
+        $rules = [
             'nome'      => 'required|string|max:255',
-            'preco'     => 'required|numeric',
+            'preco'     => 'required|numeric|min:0.01|max:5000.00',
             'categoria' => 'required|string|max:255',
-            'imagem'    => 'nullable|image|max:2048',
+            // 'imagem' => 'nullable|image|max:2048', // Original
+        ];
+
+        // Se o produto não tiver uma imagem, torne a imagem obrigatória na atualização também.
+        // Se já tiver uma imagem e o usuário não enviar uma nova, mantém a existente.
+        if (!$produto->imagem) {
+            $rules['imagem'] = 'required|image|max:2048'; // Torna obrigatório se não houver imagem
+        } else {
+            $rules['imagem'] = 'nullable|image|max:2048'; // Permite que a imagem seja opcional se já existir uma
+        }
+
+
+        $request->validate($rules, [
+            'preco.min' => 'O preço deve ser no mínimo R$ 0,01.',
+            'preco.max' => 'O preço não pode exceder R$ 5.000,00.',
+            'imagem.required' => 'A imagem do produto é obrigatória se não houver uma existente.', // <<< Mensagem de erro personalizada
+            'imagem.image' => 'O arquivo deve ser uma imagem válida.',
+            'imagem.max' => 'A imagem não pode ter mais de 2MB.'
         ]);
 
         $produto->nome      = $request->input('nome');
@@ -193,8 +229,12 @@ class HomeController extends Controller
             abort(403, 'Acesso negado');
         }
 
+        // Correção no caminho do Storage para deletar imagem de produto
         if ($produto->imagem) {
-            Storage::delete('public/profile_images/' . $produto->imagem);
+            $imagePath = 'public/product_images/' . $produto->imagem; // Corrigido para product_images
+            if (Storage::exists($imagePath)) {
+                Storage::delete($imagePath);
+            }
         }
 
         $produto->delete();
@@ -210,14 +250,22 @@ class HomeController extends Controller
         $user = Auth::user();
 
         foreach ($user->produtos as $produto) {
+            // Correção no caminho do Storage para deletar imagem de produto
             if ($produto->imagem) {
-                Storage::delete('public/profile_images/' . $produto->imagem);
+                $imagePath = 'public/product_images/' . $produto->imagem; // Corrigido para product_images
+                if (Storage::exists($imagePath)) {
+                    Storage::delete($imagePath);
+                }
             }
             $produto->delete();
         }
 
+        // Correção no caminho do Storage para deletar imagem de perfil
         if ($user->image) {
-            Storage::delete('public/profile_images/' . $user->image);
+            $imagePath = 'public/profile_images/' . $user->image; // Corrigido para profile_images
+            if (Storage::exists($imagePath)) {
+                Storage::delete($imagePath);
+            }
         }
 
         $user->delete();
@@ -234,9 +282,9 @@ class HomeController extends Controller
         $produto = Produto::findOrFail($id);
         return view('produto.show', compact('produto'));
     }
-    
+
     public function index()
-{
-    return $this->home(); // Chama o método home existente
-}
+    {
+        return $this->home(); // Chama o método home existente
+    }
 }

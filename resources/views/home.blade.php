@@ -35,9 +35,9 @@
                 <span class="badge-organico">Orgânico</span>
             @endif
             <a href="{{ route('produto.show', $produto->id) }}" aria-label="Ver detalhes do produto {{ $produto->nome }}">
-                <img src="{{ asset('imagens/product_images/' . $produto->imagem) }}" 
-                     alt="{{ $produto->nome }}" 
-                     class="card-img-top" 
+                <img src="{{ asset('imagens/product_images/' . $produto->imagem) }}"
+                     alt="{{ $produto->nome }}"
+                     class="card-img-top"
                      onerror="this.onerror=null; this.src='{{ asset('imagens/product_images/default-product.jpg') }}';" />
             </a>
             <div class="card-body">
@@ -47,10 +47,10 @@
                 @else
                     <p class="card-text text-muted">{{ $produto->categoria }}</p>
                 @endif
-                
+
                 <div class="produto-footer">
                     <p class="card-text">R$ {{ number_format($produto->preco, 2, ',', '.') }}</p>
-                    
+
                     <form action="{{ route('cart.add', $produto->id) }}" method="POST" style="display:inline-block; margin-left: 10px;">
                         @csrf
                         <button type="submit" class="btn-adicionar">
@@ -62,7 +62,7 @@
         </div>
     @empty
         <div class="w-100 text-center">
-            <p>Nenhum produto encontrado.</p>
+            <p>Nenhum produto em destaque encontrado.</p>
         </div>
     @endforelse
 </div>
@@ -71,49 +71,96 @@
 <section class="porque-escolher">
     <div class="porque-escolher-container">
         <div class="porque-escolher-image">
-            <img src="{{ asset('imagens/Agricultura-familiar.png') }}" 
-                 alt="Agricultura Familiar" 
+            <img src="{{ asset('imagens/Agricultura-familiar.png') }}"
+                 alt="Agricultura Familiar"
                  onerror="this.onerror=null; this.src='{{ asset('imagens/product_images/default-product.jpg') }}';" />
         </div>
-        
+
         <div class="porque-escolher-content">
             <h2 class="porque-escolher-title">Por Que Escolher a Agricultura Familiar?</h2>
-            
-<ul class="beneficios-list">
-    <li class="beneficio-item">
-        <div class="beneficio-icon">
-            <img src="{{ asset('imagens/folha.png') }}" alt="Ícone de folha" width="40" height="40">
-        </div>
-        <div class="beneficio-content">
-            <h3 class="beneficio-title">Sustentabilidade</h3>
-            <p class="beneficio-text">Práticas agrícolas que respeitam o meio ambiente e preservam recursos naturais.</p>
-        </div>
-    </li>
 
-    <li class="beneficio-item">
-        <div class="beneficio-icon">
-            <img src="{{ asset('imagens/caminhao.png') }}" alt="Ícone de caminhão" width="40" height="40">
-        </div>
-        <div class="beneficio-content">
-            <h3 class="beneficio-title">Economia Local</h3>
-            <p class="beneficio-text">Ao comprar diretamente dos produtores, você fortalece a economia da sua região.</p>
-        </div>
-    </li>
+            <ul class="beneficios-list">
+                <li class="beneficio-item">
+                    <div class="beneficio-icon">
+                        <img src="{{ asset('imagens/folha.png') }}" alt="Ícone de folha" width="40" height="40">
+                    </div>
+                    <div class="beneficio-content">
+                        <h3 class="beneficio-title">Sustentabilidade</h3>
+                        <p class="beneficio-text">Práticas agrícolas que respeitam o meio ambiente e preservam recursos naturais.</p>
+                    </div>
+                </li>
 
-    <li class="beneficio-item">
-        <div class="beneficio-icon">
-            <img src="{{ asset('imagens/carrinho.png') }}" alt="Ícone de carrinho" width="40" height="40">
-        </div>
-        <div class="beneficio-content">
-            <h3 class="beneficio-title">Qualidade Superior</h3>
-            <p class="beneficio-text">Alimentos mais frescos, saborosos e nutritivos, colhidos no ponto certo.</p>
-        </div>
-    </li>
-</ul>
+                <li class="beneficio-item">
+                    <div class="beneficio-icon">
+                        <img src="{{ asset('imagens/caminhao.png') }}" alt="Ícone de caminhão" width="40" height="40">
+                    </div>
+                    <div class="beneficio-content">
+                        <h3 class="beneficio-title">Economia Local</h3>
+                        <p class="beneficio-text">Ao comprar diretamente dos produtores, você fortalece a economia da sua região.</p>
+                    </div>
+                </li>
 
-            
+                <li class="beneficio-item">
+                    <div class="beneficio-icon">
+                        <img src="{{ asset('imagens/carrinho.png') }}" alt="Ícone de carrinho" width="40" height="40">
+                    </div>
+                    <div class="beneficio-content">
+                        <h3 class="beneficio-title">Qualidade Superior</h3>
+                        <p class="beneficio-text">Alimentos mais frescos, saborosos e nutritivos, colhidos no ponto certo.</p>
+                    </div>
+                </li>
+            </ul>
+
         </div>
     </div>
 </section>
+
+<hr class="my-4">
+
+{{-- NOVA SEÇÃO DE PRODUTOS: AGORA EXIBINDO LEGUMES --}}
+<section class="promocao-header">
+    <h2 class="promocao-header--title">Descubra Mais Produtos Frescos</h2>
+    <p>Conheça a variedade de legumes frescos e saudáveis, colhidos diretamente para você.</p>
+</section>
+
+<div class="container-principal">
+    @forelse($legumes ?? [] as $produto) 
+        <div class="produto-container-principal">
+            @if($produto->organico)
+                <span class="badge-organico">Orgânico</span>
+            @endif
+            <a href="{{ route('produto.show', $produto->id) }}" aria-label="Ver detalhes do produto {{ $produto->nome }}">
+                <img src="{{ asset('imagens/product_images/' . $produto->imagem) }}"
+                     alt="{{ $produto->nome }}"
+                     class="card-img-top"
+                     onerror="this.onerror=null; this.src='{{ asset('imagens/product_images/default-product.jpg') }}';" />
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">{{ $produto->nome }}</h5>
+                @if($produto->produtor)
+                    <p class="card-text text-muted">{{ $produto->produtor }}</p>
+                @else
+                    <p class="card-text text-muted">{{ $produto->categoria }}</p>
+                @endif
+
+                <div class="produto-footer">
+                    <p class="card-text">R$ {{ number_format($produto->preco, 2, ',', '.') }}</p>
+
+                    <form action="{{ route('cart.add', $produto->id) }}" method="POST" style="display:inline-block; margin-left: 10px;">
+                        @csrf
+                        <button type="submit" class="btn-adicionar">
+                            <i class="bi bi-cart"></i> Adicionar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @empty
+        <div class="w-100 text-center">
+            <p>Nenhum legume disponível no momento.</p> {{-- Mensagem atualizada --}}
+        </div>
+    @endforelse
+</div>
+{{-- FIM DA NOVA SEÇÃO DE PRODUTOS --}}
 
 @endsection

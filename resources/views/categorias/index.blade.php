@@ -30,19 +30,11 @@
             </a>
         </div>
     @else
-        <!-- Filtros e informações -->
+        <!-- Apenas informações da categoria -->
         <div class="categoria-filtros">
             <div class="categoria-info">
                 <i class="fas fa-box"></i>
                 {{ $produtos->count() }} {{ $produtos->count() == 1 ? 'produto encontrado' : 'produtos encontrados' }}
-            </div>
-            <div class="categoria-ordenacao">
-                <select onchange="ordenarProdutos(this.value)">
-                    <option value="nome">Ordenar por Nome</option>
-                    <option value="preco_asc">Menor Preço</option>
-                    <option value="preco_desc">Maior Preço</option>
-                    <option value="recente">Mais Recentes</option>
-                </select>
             </div>
         </div>
 
@@ -68,13 +60,7 @@
                         <p class="card-text">R$ {{ number_format($produto->preco, 2, ',', '.') }}</p>
                         <p class="card-text text-muted">{{ $produto->categoria }}</p>
                         
-                        <form action="{{ route('cart.add', $produto->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn-adicionar">
-                                <i class="fas fa-shopping-cart"></i>
-                                Adicionar ao Carrinho
-                            </button>
-                        </form>
+                        
                     </div>
                 </div>
             @endforeach
@@ -90,13 +76,6 @@
 </div>
 
 <script>
-function ordenarProdutos(criterio) {
-    // Implementar lógica de ordenação via AJAX ou redirecionamento
-    const url = new URL(window.location);
-    url.searchParams.set('ordenar', criterio);
-    window.location.href = url.toString();
-}
-
 // Animação de entrada dos produtos
 document.addEventListener('DOMContentLoaded', function() {
     const produtos = document.querySelectorAll('.produto-container-principal');
