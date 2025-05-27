@@ -1,5 +1,0 @@
-/* Remove qualquer borda ou linha superior que possa existir */
-.produto-container-principal::before,
-.produto-container-principal::after {
-  display: none;
-}

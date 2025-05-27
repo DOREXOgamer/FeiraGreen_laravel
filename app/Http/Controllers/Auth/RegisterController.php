@@ -10,28 +10,17 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
     /**
-     * Where to redirect users after registration.
+     * Para onde redirecionar após o registro.
      *
      * @var string
      */
     protected $redirectTo = '/home';
 
     /**
-     * Create a new controller instance.
+     * Construtor
      *
      * @return void
      */
@@ -41,7 +30,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * Get a validator for an incoming registration request.
+     * Validação dos dados
      *
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
@@ -49,24 +38,38 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'name'  => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'image' => ['nullable', 'image', 'max:2048'], // validação da imagem (opcional)
         ]);
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Criação do usuário no banco de dados
      *
      * @param  array  $data
      * @return \App\Models\User
      */
     protected function create(array $data)
     {
+        $imageName = null;
+
+        if (request()->hasFile('image') && request()->file('image')->isValid()) {
+            $image = request()->file('image');
+
+            // Renomeia para evitar conflitos, igual ao HomeController
+            $imageName = time() . '_' . $image->getClientOriginalName();
+
+            // Move para a mesma pasta que o HomeController usa
+            $image->move(public_path('imagens/profile_images'), $imageName);
+        }
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'image' => $imageName,
         ]);
     }
 }

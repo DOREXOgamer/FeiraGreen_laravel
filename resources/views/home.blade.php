@@ -8,6 +8,24 @@
 
 @section('content')
 
+
+@if(session('login_success') && Auth::check())
+    <div id="popup-bemvindo" class="popup-bemvindo">
+        <h2>Bem-vindo, {{ Auth::user()->name }}!</h2>
+        <p>Aproveite os produtos fresquinhos da agricultura familiar e fique de olho nas promoções!</p>
+        <button onclick="document.getElementById('popup-bemvindo').style.display='none'" class="btn-fechar-popup">
+            Fechar
+        </button>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            const popup = document.getElementById('popup-bemvindo');
+            if (popup) popup.style.display = 'none';
+        }, 8000); // Fecha depois de 8 segundos
+    </script>
+@endif
+
 <section id="home" class="full-width-banner">
     @if (session('error'))
         <div class="alert alert-danger w-100 text-center">{{ session('error') }}</div>
@@ -20,6 +38,7 @@
         <div class="alert alert-warning w-100 text-center">Nenhuma imagem disponível</div>
     @endisset
 </section>
+
 
 <hr class="my-4">
 

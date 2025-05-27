@@ -8,16 +8,6 @@
                 <div class="card-header">Criar Conta</div>
 
                 <div class="card-body">
-                
-                    @if ($errors->any())
-                        <div class="register-alert">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ str_replace(['The ', ' field is required.', ' must be a valid email address.', ' must be at least 8 characters.', ' confirmation does not match.', ' has already been taken.'], ['O campo ', ' é obrigatório.', ' deve ser um endereço de email válido.', ' deve ter pelo menos 8 caracteres.', ' de confirmação não corresponde.', ' já está em uso.'], $error) }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
 
                     <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="register-form">
                         @csrf

@@ -12,7 +12,7 @@
     <div id="area-menu">
     <a href="{{ route('categoria.exibir', 'frutas') }}">Frutas</a>
     <a href="{{ route('categoria.exibir', 'verduras') }}">Verduras</a>
-    <a href="{{ route('categoria.exibir', 'hortalicas') }}">Hortaliças</a>
+    <a href="{{ route('categoria.exibir', 'hortaliças') }}">Hortaliças</a>
     <a href="{{ route('categoria.exibir', 'legumes') }}">Legumes</a>
     <a href="{{ route('categoria.exibir', 'outros') }}">Outros</a>
 

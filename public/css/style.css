@@ -4436,3 +4436,175 @@ select.form-control:focus {
   outline: 2px solid #00a651;
   outline-offset: 2px;
 }
+
+/*-----------------------------------------------------------------------------------------------*/
+/*                       Pop up                                                                */
+/*--------------------------------------------------------------------------------------------*/
+
+/* Overlay para escurecer o fundo */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  animation: fadeIn 0.3s ease-out;
+  backdrop-filter: blur(2px);
+}
+
+/* Popup de boas-vindas */
+.popup-bemvindo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  border: none;
+  animation: fadeInScale 0.4s ease-out;
+}
+
+.popup-bemvindo h2 {
+  color: #00a651;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
+.popup-bemvindo p {
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  margin-top: 0;
+}
+
+.btn-fechar-popup {
+  background-color: #00a651;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.btn-fechar-popup:hover {
+  background-color: #008c45;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 166, 81, 0.3);
+}
+
+.btn-fechar-popup:active {
+  transform: translateY(0);
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOutScale {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+}
+
+/* Classes para animação de saída */
+.popup-overlay.closing {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+.popup-bemvindo.closing {
+  animation: fadeOutScale 0.3s ease-out forwards;
+}
+
+/* Responsividade do popup */
+@media (max-width: 575.98px) {
+  .popup-bemvindo {
+    padding: 1.5rem;
+    max-width: 350px;
+    margin: 0 1rem;
+    width: calc(100% - 2rem);
+  }
+  
+  .popup-bemvindo h2 {
+    font-size: 1.3rem;
+  }
+  
+  .popup-bemvindo p {
+    font-size: 0.9rem;
+  }
+  
+  .btn-fechar-popup {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .popup-bemvindo {
+    padding: 1rem;
+    max-width: 300px;
+  }
+  
+  .popup-bemvindo h2 {
+    font-size: 1.2rem;
+  }
+  
+  .popup-bemvindo p {
+    font-size: 0.85rem;
+  }
+  
+  .btn-fechar-popup {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Previne scroll do body quando popup está aberto */
+body.popup-open {
+  overflow: hidden;
+}
