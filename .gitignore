@@ -21,3 +21,5 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/public/imagens/product_images
+/public/imagens/profile_images
