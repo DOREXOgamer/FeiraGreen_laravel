@@ -43,8 +43,10 @@
             <div class="input-group">
               <span class="input-group-text">R$</span>
               <input type="number" step="0.01" id="preco" name="preco"
-                    value="{{ old('preco') }}" required
-                    class="produto-add-control @error('preco') is-invalid @enderror">
+                value="{{ old('preco') }}" required max="5000"
+                oninput="if (this.value > 5000) this.value = 5000;"
+                class="produto-add-control @error('preco') is-invalid @enderror">
+
               @error('preco')
                 <div class="produto-add-invalid-feedback">{{ $message }}</div>
               @enderror

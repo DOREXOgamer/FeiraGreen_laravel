@@ -16,7 +16,19 @@
                             <label for="name" class="register-label">Nome</label>
 
                             <div class="register-input-container">
-                                <input id="name" type="text" class="register-control @error('name') register-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Digite seu nome completo">
+                                <input 
+                                    id="name" 
+                                    type="text" 
+                                    class="register-control @error('name') register-invalid @enderror" 
+                                    name="name" 
+                                    value="{{ old('name') }}" 
+                                    required 
+                                    autocomplete="name" 
+                                    autofocus 
+                                    placeholder="Digite seu nome completo"
+                                    maxlength="100"
+                                    pattern="[A-Za-zÀ-ÿ\s]+"
+                                    title="O nome deve conter apenas letras e espaços. Máximo de 100 caracteres.">
 
                                 @error('name')
                                     <span class="register-feedback" role="alert">

@@ -55,12 +55,22 @@
                     <!-- Nome -->
                     <div class="form-group">
                         <label for="name" class="form-label">Nome Completo</label>
-                        <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required class="form-control">
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            value="{{ old('name', $user->name) }}" 
+                            required 
+                            class="form-control"
+                            maxlength="100"
+                            pattern="[A-Za-zÀ-ÿ\s]+"
+                            title="O nome deve conter apenas letras e espaços. Máximo de 100 caracteres."
+                        >
                         @error('name')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    
+
                     <button type="submit" class="btn btn-primary update-btn">
                         Salvar Alterações
                     </button>
